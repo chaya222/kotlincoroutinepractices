@@ -2,8 +2,12 @@ package com.example.kotlincoroutinepractices
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
+import timber.log.Timber
+import kotlin.system.measureTimeMillis
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,42 +15,38 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-    }
-
-    fun whichThreadIamOn(){
-        GlobalScope.launch {
-            println("TestingCoroutines--GlobalScope--" + Thread.currentThread().name)
+        btnClick.setOnClickListener {
+            CoroutineScope(Main+CoroutineName("my coroutine")).launch {
+                suspenddd()
+            }
         }
 
-        GlobalScope.async {
-            println("TestingCoroutines--GlobalScopeAsync--" + Thread.currentThread().name)
-        }
 
-        lifecycleScope.launch {
-            println("TestingCoroutines--lifecycleScope--" + Thread.currentThread().name)
-        }
-
-        CoroutineScope(CoroutineName("hello")).launch {
-            println("TestingCoroutines--CoroutineScope--" + Thread.currentThread().name)
-        }
 
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        lifecycleScope.launchWhenCreated {
-            //println("TestingCoroutines--launchWhenCreated" + lifecycle.currentState.name)
-        }
-        lifecycleScope.launchWhenResumed {
-            // println("TestingCoroutines--launchWhenResumed" + lifecycle.currentState.name)
-        }
-        lifecycleScope.launchWhenStarted {
-            //println("TestingCoroutines--launchWhenStarted" + lifecycle.currentState.name)
+    private suspend fun suspenddd() {
+        val k = withContext(CoroutineName("my name 2")) {
+            launch {
+                delay(3000)
+                log("launch1")
+            }
+            launch {
+                delay(1000)
+                log("launch2")
+            }
         }
 
     }
 
+
+    private fun logThread(methodName: String) {
+        Timber.i("Debug: $methodName -- ${Thread.currentThread().name}")
+    }
+
+    private fun log(info: String) {
+        Timber.i("Debug: $info")
+    }
 
 }
 
