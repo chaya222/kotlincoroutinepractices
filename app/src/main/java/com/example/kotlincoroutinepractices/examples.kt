@@ -1,38 +1,49 @@
 package com.example.kotlincoroutinepractices
 
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
-
-
-//--------------------------------------------------beginner example
-//private suspend fun showResult() {
-//    val time = measureTimeMillis {
-//        val result1 = getResult1FromApi()
-//        setTextOnMainThread(result1)
-//        val result2 = getResult2FromApi(result1)
-//        setTextOnMainThread(result2)
-//    }
-//    log(time.toString())
-//}
-//
-//private suspend fun setTextOnMainThread(res: String) {
-//    withContext(Dispatchers.Main) {
-//        tvResult.text = "${tvResult.text}\n$res"
-//    }
+//--------------------------------------------------Suspended function
+//private suspend fun makeFakeApiCall(){
+//    logThread("getResult1FromApi")
+//    val res = getResult1FromApi()
+//    log("got result $res")
 //}
 //
 //private suspend fun getResult1FromApi(): String {
-//    logThread("getResult1FromApi")
-//    delay(1000)
+//    delay(2000)
 //    return "Result #1"
 //}
-//
-//private suspend fun getResult2FromApi(res1: String): String {
-//    logThread("getResult2FromApi")
-//    delay(2000)
-//    return "Result #2 $res1"
+//--------------------------------------------------Beginner launch example
+//private suspend fun doSync(delayTime: Int) {
+//    delay(1000L * delayTime)
+//    log("child #$delayTime Success")
 //}
 //
+
+//--------------------------------------------------Beginner Async parallel example
+//private suspend fun getResult(delayTime: Int) {
+//    delay(1000L * delayTime)
+//    return "Result #$delayTime"
+//}
+//
+//private suspend fun showOnMainThread(str: String) {
+//    withContext(Dispatchers.Main) {
+//        tvResult.text = "${tvResult.text}\n$str"
+//    }
+//}
+
+//--------------------------------------------------Structure concurrency
+//private suspend fun getResult(delayTime: Int): String {
+//    delay(1000L * delayTime)
+//    if (delayTime == 2)
+//        throw Exception("Exception :  I am produced by $delayTime")
+//    return "Result #$delayTime"
+//}
+
 //--------------------------------------------------whichThreadIamOn
 //private fun whichThreadIamOn() {
 //    GlobalScope.launch {
